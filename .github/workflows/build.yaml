@@ -15,7 +15,8 @@ jobs:
       - name: checkout python
         uses: actions/checkout@v4
         with:
-          repository: "python/cpython"
+          repository: python/cpython
+          path: cpython
           ref: ${{ github.event.inputs.py_commit }}
 
       - name: compile

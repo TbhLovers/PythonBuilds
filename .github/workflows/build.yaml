@@ -16,12 +16,15 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      WF_PY_DIR: ${{ github.workspace }}/cpython
+      WF_BUILD_DIR: ${{ github.workspace }}/cpython/build
     steps:
       - name: checkout python
         uses: actions/checkout@v4
         with:
           repository: python/cpython
-          path: cpython
+          path: $WF_PY_DIR
           ref: ${{ github.event.inputs.py_commit }}
 
       - name: install llvm
@@ -32,20 +35,20 @@ jobs:
 
       - name: compile
         run: |
-          cd cpython
-          mkdir $(pwd)/build
+          cd $WF_PY_DIR
+          mkdir ${WF_BUILD_DIR}
           sudo apt-get install build-essential gdb lcov pkg-config \
             libbz2-dev libffi-dev libgdbm-dev libgdbm-compat-dev liblzma-dev \
             libncurses5-dev libreadline6-dev libsqlite3-dev libssl-dev \
             lzma lzma-dev tk-dev uuid-dev zlib1g-dev libmpdec-dev zip
-          ./configure --enable-optimizations --with-lto --prefix=$(pwd)/build ${{ github.event.inputs.flags }}
+          ./configure --enable-optimizations --with-lto --prefix=${WF_BUILD_DIR} ${{ github.event.inputs.flags }}
           make -s -j4
           make install
 
       - name: zip
-        run: 
-          ls
-          zip -r python-${{ github.event.inputs.py_commit }}-built.zip build
+        run: |
+          ls ${WF_BUILD_DIR}
+          zip -r python-${{ github.event.inputs.py_commit }}-built.zip ${WF_BUILD_DIR}
       
       - name: upload
         uses: actions/upload-artifact@v2

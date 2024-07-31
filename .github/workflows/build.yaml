@@ -10,7 +10,7 @@ on:
       flags:
         description: "flags to compile with"
         default: ""
-        required: true
+        required: false
         type: string
 
 jobs:

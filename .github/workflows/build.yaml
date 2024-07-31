@@ -7,6 +7,11 @@ on:
         description: "commit to checkout python to"
         required: true
         type: string
+      flags:
+        description: "flags to compile with"
+        default: ""
+        required: true
+        type: string
 
 jobs:
   build:
@@ -33,7 +38,7 @@ jobs:
             libbz2-dev libffi-dev libgdbm-dev libgdbm-compat-dev liblzma-dev \
             libncurses5-dev libreadline6-dev libsqlite3-dev libssl-dev \
             lzma lzma-dev tk-dev uuid-dev zlib1g-dev libmpdec-dev zip
-          CC=clang-18 CXX=clang-18++ ./configure --enable-optimizations --with-lto --enable-experimental-jit --prefix=$(pwd)/build
+          CC=clang-18 CXX=clang-18++ ./configure --enable-optimizations --with-lto --prefix=$(pwd)/build ${{ github.event.inputs.flags }}
           make -s -j4
           make install
 

@@ -61,4 +61,5 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: ${WF_ZIPFILE}
+          tag_name: ${{ github.event.inputs.py_commit }}-${NOW}
           repository: TbhLovers/PythonBuilds

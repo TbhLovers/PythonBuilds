@@ -18,7 +18,7 @@ permissions:
 
 jobs:
   build:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     env:
       WF_PY_DIR: ${{ github.workspace }}/cpython
       WF_BUILD_DIR: ${{ github.workspace }}/cpython/build
@@ -35,6 +35,7 @@ jobs:
         run: |
           cd $WF_PY_DIR
           mkdir ${WF_BUILD_DIR}
+          echo "zipfile: ${WF_ZIPFILE}"
           sudo apt-get install build-essential gdb lcov pkg-config \
             libbz2-dev libffi-dev libgdbm-dev libgdbm-compat-dev liblzma-dev \
             libncurses5-dev libreadline6-dev libsqlite3-dev libssl-dev \

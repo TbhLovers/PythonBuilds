@@ -62,6 +62,8 @@ jobs:
           zip -r ${WF_ZIPFILE} ${WF_BUILD_DIR}
       
       - name: upload
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           gh release create ${RLNAME} -R TbhLovers/PythonBuilds --notes hi
           gh release upload ${RLNAME} ${WF_ZIPFILE} -R TbhLovers/PythonBuilds

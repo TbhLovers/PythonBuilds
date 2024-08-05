@@ -8,7 +8,7 @@ on:
         required: true
         type: string
       flags:
-        description: "flags to compile with"
+        description: "flags to configure with"
         default: ""
         required: false
         type: string
@@ -58,7 +58,7 @@ jobs:
         run: echo "NOW=$(date +'%s')" >> $GITHUB_ENV
       
       - name: upload
-        env:
-          GITHUB_TOKEN: ${{ github.TOKEN }}
-        run: |
-          gh release upload ${{ github.event.inputs.py_commit }}-$NOW ${WF_ZIPFILE} -R TbhLovers/PythonBuilds
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${WF_ZIPFILE}
+          repository: TbhLovers/PythonBuilds

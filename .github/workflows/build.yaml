@@ -24,6 +24,14 @@ jobs:
       WF_BUILD_DIR: ${{ github.workspace }}/cpython/build
       WF_ZIPFILE: ${{ github.workspace }}/cpython/python-${{ github.event.inputs.py_commit }}-built.zip
     steps:
+      - name: set env
+        run: |
+          echo "NOW=$(date +'%s')" >> $GITHUB_ENV
+          echo "RLNAME=${{ github.event.inputs.py_commit }}-${NOW}" >> $GITHUB_ENV
+
+      - name: test
+        run: echo "now ${NOW} -- rl ${RLNAME}"
+    
       - name: checkout python
         uses: actions/checkout@v4
         with:
@@ -53,13 +61,8 @@ jobs:
         run: |
           ls ${WF_BUILD_DIR}
           zip -r ${WF_ZIPFILE} ${WF_BUILD_DIR}
-
-      - name: get date
-        run: echo "NOW=$(date +'%s')" >> $GITHUB_ENV
       
       - name: upload
-        uses: softprops/action-gh-release@v2
-        with:
-          files: ${WF_ZIPFILE}
-          tag_name: ${{ github.event.inputs.py_commit }}-${NOW}
-          repository: TbhLovers/PythonBuilds
+        run: |
+          gh release create ${RLNAME} -R TbhLovers/PythonBuilds --notes hi
+          gh release upload ${RLNAME} ${WF_ZIPFILE} -R TbhLovers/PythonBuilds

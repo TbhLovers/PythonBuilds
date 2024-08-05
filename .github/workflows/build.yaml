@@ -31,7 +31,7 @@ jobs:
           path: cpython
           ref: ${{ github.event.inputs.py_commit }}
 
-      - name: compile
+      - name: install dependencies
         run: |
           cd $WF_PY_DIR
           mkdir ${WF_BUILD_DIR}
@@ -41,6 +41,10 @@ jobs:
             libncurses5-dev libreadline6-dev libsqlite3-dev libssl-dev \
             lzma lzma-dev tk-dev uuid-dev zlib1g-dev libmpdec-dev zip \
             llvm clang
+
+      - name: compile
+        run: |
+          cd $WF_PY_DIR
           CC=clang ./configure --enable-optimizations --with-lto --prefix=${WF_BUILD_DIR} ${{ github.event.inputs.flags }}
           make -s -j4
           make install
@@ -49,9 +53,12 @@ jobs:
         run: |
           ls ${WF_BUILD_DIR}
           zip -r ${WF_ZIPFILE} ${WF_BUILD_DIR}
+
+      - name: get date
+        run: echo "NOW=$(date +'%s')" >> $GITHUB_ENV
       
       - name: upload
         env:
           GITHUB_TOKEN: ${{ github.TOKEN }}
         run: |
-          gh release upload ${{ github.event.inputs.py_commit }}-$(date "+%s") ${WF_ZIPFILE}
+          gh release upload ${{ github.event.inputs.py_commit }}-$NOW ${WF_ZIPFILE} -R TbhLovers/PythonBuilds

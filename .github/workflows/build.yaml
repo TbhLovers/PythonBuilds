@@ -26,11 +26,10 @@ jobs:
     steps:
       - name: set env
         run: |
-          echo "NOW=$(date +'%s')" >> $GITHUB_ENV
-          echo "RLNAME=${{ github.event.inputs.py_commit }}-${NOW}" >> $GITHUB_ENV
+          echo "RLNAME=${{ github.event.inputs.py_commit }}-$(date +'%s')" >> $GITHUB_ENV
 
       - name: test
-        run: echo "now ${NOW} -- rl ${RLNAME}"
+        run: echo "rl ${RLNAME}"
     
       - name: checkout python
         uses: actions/checkout@v4

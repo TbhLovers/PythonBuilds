@@ -1,4 +1,4 @@
-name: build python for linux x64
+name: build python for macos arm
 
 on:
   workflow_dispatch:
